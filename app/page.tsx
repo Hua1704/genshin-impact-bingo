@@ -7,12 +7,14 @@ export default function Home() {
   const [board, setBoard] = useState<any[]>([]);
   const [currentWish, setCurrentWish] = useState<any>(null);
   const [isWishing, setIsWishing] = useState(false);
+  const [pulledChars, setPulledChars] = useState<string[]>([]);
 
   // 1. Hàm khởi tạo bảng Bingo
   const generateNewBoard = () => {
     setHasWon(false)
     // Xáo trộn toàn bộ 80+ nhân vật
-    const shuffled = [...charactersData].sort(() => 0.5 - Math.random());
+    const poolWithoutPaimon = charactersData.filter(char => char.name !== "Paimon");
+    const shuffled = [...poolWithoutPaimon].sort(() => 0.5 - Math.random());
     
     // Lấy 24 nhân vật ngẫu nhiên cho bảng
     const selected = shuffled.slice(0, 24).map(char => ({
@@ -40,6 +42,14 @@ export default function Home() {
   // 2. Logic quay Gacha
   const handleWish = () => {
     if (isWishing) return;
+    
+    const availablePool = charactersData.filter(char => !pulledChars.includes(char.name));
+
+    if (availablePool.length === 0) {
+      alert("Đã quay hết toàn bộ nhân vật!");
+      return;
+    }
+
     setIsWishing(true);
 
     // Hiệu ứng chờ 800ms cho giống cảm giác "nổ" trong game
@@ -55,7 +65,7 @@ export default function Home() {
       );
       
       setIsWishing(false);
-    }, 800);
+    }, 200);
   };
 
   const toggleMark = (index: number) => {
@@ -104,7 +114,15 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0c0f12] text-white flex flex-col items-center py-8 px-4 font-sans">
+    <main className="min-h-screen relative flex flex-col items-center py-8 px-4 font-sans overflow-hidden">
+      {/* Layer Background */}
+      <div 
+        className="fixed inset-0 z-[-1] bg-cover bg-center bg-no-repeat"
+        style={{ 
+          backgroundImage: "url('/assets/images/backgrounds/genshin_bg.png')",
+          filter: "brightness(0.6)" // Làm tối ảnh một chút để nổi bật bảng Bingo
+        }}
+      />
       <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#f3d183] to-[#b88a44] mb-10 tracking-widest uppercase">
         Genshin Bingo
       </h1>
@@ -141,13 +159,6 @@ export default function Home() {
                   {char.name}
                 </div>
 
-                {/* Dấu gạch chéo khi trúng Bingo */}
-                {char.isMarked && !char.isFree && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-[140%] h-1 bg-[#f3d183] rotate-45 shadow-[0_0_8px_#f3d183]"></div>
-                    <div className="w-[140%] h-1 bg-[#f3d183] -rotate-45 shadow-[0_0_8px_#f3d183] absolute"></div>
-                  </div>
-                )}
               </div>
             ))}
           </div>
