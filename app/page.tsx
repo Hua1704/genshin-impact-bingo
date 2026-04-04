@@ -24,6 +24,7 @@ export default function Home() {
     
     // Ô Paimon ở giữa (Free Slot)
     const paimon = {
+      id: "paimon",
       name: "Paimon",
       imageUrl: "/assets/images/paimon_icon.png", 
       isFree: true,
