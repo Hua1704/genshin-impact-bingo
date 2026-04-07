@@ -1,52 +1,65 @@
 [
-  { "id": "char_001", "name": "Columbina", "imageUrl": "/assets/images/characters/Columbina_Icon.webp" },
-  { "id": "char_002", "name": "Mavuika", "imageUrl": "/assets/images/characters/Mavuika_Icon.webp" },
-  { "id": "char_003", "name": "Furina", "imageUrl": "/assets/images/characters/Furina_Icon.webp" },
-  { "id": "char_004", "name": "Nahida", "imageUrl": "/assets/images/characters/Nahida_Icon.webp" },
-  { "id": "char_005", "name": "Raiden Shogun", "imageUrl": "/assets/images/characters/Raiden_Shogun_Icon.webp" },
-  { "id": "char_006", "name": "Zhongli", "imageUrl": "/assets/images/characters/Zhongli_Icon.webp" },
-  { "id": "char_007", "name": "Venti", "imageUrl": "/assets/images/characters/Venti_Icon.webp" },
-  { "id": "char_008", "name": "Keqing", "imageUrl": "/assets/images/characters/Keqing_Icon.webp" },
-  { "id": "char_009", "name": "Qiqi", "imageUrl": "/assets/images/characters/Qiqi_Icon.webp" },
-  { "id": "char_010", "name": "Mona", "imageUrl": "/assets/images/characters/Mona_Icon.webp" },
-  { "id": "char_011", "name": "Diluc", "imageUrl": "/assets/images/characters/Diluc_Icon.webp" },
-  { "id": "char_012", "name": "Jean", "imageUrl": "/assets/images/characters/Jean_Icon.webp" },
-  { "id": "char_013", "name": "Tighnari", "imageUrl": "/assets/images/characters/Tighnari_Icon.webp" },
-  { "id": "char_014", "name": "Dehya", "imageUrl": "/assets/images/characters/Dehya_Icon.webp" },
-  { "id": "char_015", "name": "Mizuki", "imageUrl": "/assets/images/characters/Yumemizuki_Mizuki_Icon.webp" },
-  { "id": "char_016", "name": "Klee", "imageUrl": "/assets/images/characters/Klee_Icon.webp" },
-  { "id": "char_017", "name": "Kaedehara Kazuha", "imageUrl": "/assets/images/characters/Kaedehara_Kazuha_Icon.webp" },
-  { "id": "char_018", "name": "Eula", "imageUrl": "/assets/images/characters/Eula_Icon.webp" },
-  { "id": "char_019", "name": "Xiao", "imageUrl": "/assets/images/characters/Xiao_Icon.webp" },
-  { "id": "char_020", "name": "Hu Tao", "imageUrl": "/assets/images/characters/Hu_Tao_Icon.webp" },
-  { "id": "char_021", "name": "Ganyu", "imageUrl": "/assets/images/characters/Ganyu_Icon.webp" },
-  { "id": "char_022", "name": "Albedo", "imageUrl": "/assets/images/characters/Albedo_Icon.webp" },
-  { "id": "char_023", "name": "Tartaglia", "imageUrl": "/assets/images/characters/Tartaglia_Icon.webp" },
-  { "id": "char_024", "name": "Kamisato Ayaka", "imageUrl": "/assets/images/characters/Kamisato_Ayaka_Icon.webp" },
-  { "id": "char_025", "name": "Shenhe", "imageUrl": "/assets/images/characters/Shenhe_Icon.webp" },
-  { "id": "char_026", "name": "Yae Miko", "imageUrl": "/assets/images/characters/Yae_Miko_Icon.webp" },
-  { "id": "char_027", "name": "Yelan", "imageUrl": "/assets/images/characters/Yelan_Icon.webp" },
-  { "id": "char_028", "name": "Wanderer", "imageUrl": "/assets/images/characters/Wanderer_Icon.webp" },
-  { "id": "char_029", "name": "Alhaitham", "imageUrl": "/assets/images/characters/Alhaitham_Icon.webp" },
-  { "id": "char_030", "name": "Neuvillette", "imageUrl": "/assets/images/characters/Neuvillette_Icon.webp" },
-  { "id": "char_031", "name": "Wriothesley", "imageUrl": "/assets/images/characters/Wriothesley_Icon.webp" },
-  { "id": "char_032", "name": "Navia", "imageUrl": "/assets/images/characters/Navia_Icon.webp" },
-  { "id": "char_033", "name": "Xianyun", "imageUrl": "/assets/images/characters/Xianyun_Icon.webp" },
-  { "id": "char_034", "name": "Arlecchino", "imageUrl": "/assets/images/characters/Arlecchino_Icon.webp" },
-  { "id": "char_035", "name": "Clorinde", "imageUrl": "/assets/images/characters/Clorinde_Icon.webp" },
-  { "id": "char_036", "name": "Kinich", "imageUrl": "/assets/images/characters/Kinich_Icon.webp" },
-  { "id": "char_037", "name": "Xilonen", "imageUrl": "/assets/images/characters/Xilonen_Icon.webp" },
-  { "id": "char_038", "name": "Mualani", "imageUrl": "/assets/images/characters/Mualani_Icon.webp" },
-  { "id": "char_039", "name": "Chasca", "imageUrl": "/assets/images/characters/Chasca_Icon.webp" },
-  { "id": "char_040", "name": "Citlali", "imageUrl": "/assets/images/characters/Citlali_Icon.webp" },
-  { "id": "char_041", "name": "Escoffier", "imageUrl": "/assets/images/characters/Escoffier_Icon.webp" },
-  { "id": "char_042", "name": "Skirk", "imageUrl": "/assets/images/characters/Skirk_Icon.webp" },
-  { "id": "char_043", "name": "Ineffa", "imageUrl": "/assets/images/characters/Ineffa_Icon.webp" },
-  { "id": "char_044", "name": "Flins", "imageUrl": "/assets/images/characters/Flins_Icon.webp" },
-  { "id": "char_045", "name": "Lauma", "imageUrl": "/assets/images/characters/Lauma_Icon.webp" },
-  { "id": "char_046", "name": "Nefer", "imageUrl": "/assets/images/characters/Nefer_Icon.webp" },
-  { "id": "char_047", "name": "Durin", "imageUrl": "/assets/images/characters/Durin_Icon.webp" },
-  { "id": "char_048", "name": "Zibai", "imageUrl": "/assets/images/characters/Zibai_Icon.webp" },
-  { "id": "char_049", "name": "Varka", "imageUrl": "/assets/images/characters/Varka_Icon.webp" },
-  { "id": "char_050", "name": "Cyno", "imageUrl": "/assets/images/characters/Cyno_Icon.webp" }
+  {
+    "element": "pyro",
+    "characters": [
+      { "id": "char_001", "name": "Mavuika", "star": 5, "imageUrl": "/assets/images/characters/Mavuika_Icon.webp" },
+      { "id": "char_002", "name": "Arlecchino", "star": 5, "imageUrl": "/assets/images/characters/Arlecchino_Icon.webp" },
+      { "id": "char_003", "name": "Bennett", "star": 4, "imageUrl": "/assets/images/characters/Bennett_Icon.webp" },
+      { "id": "char_004", "name": "Xiangling", "star": 4, "imageUrl": "/assets/images/characters/Xiangling_Icon.webp" }
+    ]
+  },
+  {
+    "element": "anemo",
+    "characters": [
+      { "id": "char_005", "name": "Venti", "star": 5, "imageUrl": "/assets/images/characters/Venti_Icon.webp" },
+      { "id": "char_006", "name": "Wanderer", "star": 5, "imageUrl": "/assets/images/characters/Wanderer_Icon.webp" },
+      { "id": "char_007", "name": "Sucrose", "star": 4, "imageUrl": "/assets/images/characters/Sucrose_Icon.webp" },
+      { "id": "char_008", "name": "Heizou", "star": 4, "imageUrl": "/assets/images/characters/Shikanoin_Heizou_Icon.webp" }
+    ]
+  },
+  {
+    "element": "geo",
+    "characters": [
+      { "id": "char_009", "name": "Zhongli", "star": 5, "imageUrl": "/assets/images/characters/Zhongli_Icon.webp" },
+      { "id": "char_010", "name": "Albedo", "star": 5, "imageUrl": "/assets/images/characters/Albedo_Icon.webp" },
+      { "id": "char_011", "name": "Ningguang", "star": 4, "imageUrl": "/assets/images/characters/Ningguang_Icon.webp" },
+      { "id": "char_012", "name": "Noelle", "star": 4, "imageUrl": "/assets/images/characters/Noelle_Icon.webp" }
+    ]
+  },
+  {
+    "element": "electro",
+    "characters": [
+      { "id": "char_013", "name": "Raiden", "star": 5, "imageUrl": "/assets/images/characters/Raiden_Shogun_Icon.webp" },
+      { "id": "char_014", "name": "Flins", "star": 5, "imageUrl": "/assets/images/characters/Flins_Icon.webp" },
+      { "id": "char_015", "name": "Lisa", "star": 4, "imageUrl": "/assets/images/characters/Lisa_Icon.webp" },
+      { "id": "char_016", "name": "Fischl", "star": 4, "imageUrl": "/assets/images/characters/Fischl_Icon.webp" }
+    ]
+  },
+  {
+    "element": "dendro",
+    "characters": [
+      { "id": "char_017", "name": "Nahida", "star": 5, "imageUrl": "/assets/images/characters/Nahida_Icon.webp" },
+      { "id": "char_018", "name": "Nefer", "star": 5, "imageUrl": "/assets/images/characters/Nefer_Icon.webp" },
+      { "id": "char_019", "name": "Collei", "star": 4, "imageUrl": "/assets/images/characters/Collei_Icon.webp" },
+      { "id": "char_020", "name": "Yaoyao", "star": 4, "imageUrl": "/assets/images/characters/Yaoyao_Icon.webp" }
+    ]
+  },
+  {
+    "element": "hydro",
+    "characters": [
+      { "id": "char_021", "name": "Furina", "star": 5, "imageUrl": "/assets/images/characters/Furina_Icon.webp" },
+      { "id": "char_022", "name": "Columbina", "star": 5, "imageUrl": "/assets/images/characters/Columbina_Icon.webp" },
+      { "id": "char_023", "name": "Barbara", "star": 4, "imageUrl": "/assets/images/characters/Barbara_Icon.webp" },
+      { "id": "char_024", "name": "Xingqiu", "star": 4, "imageUrl": "/assets/images/characters/Xingqiu_Icon.webp" }
+    ]
+  },
+  {
+    "element": "cryo",
+    "characters": [
+      { "id": "char_025", "name": "Ganyu", "star": 5, "imageUrl": "/assets/images/characters/Ganyu_Icon.webp" },
+      { "id": "char_026", "name": "Qiqi", "star": 5, "imageUrl": "/assets/images/characters/Qiqi_Icon.webp" },
+      { "id": "char_027", "name": "Chongyun", "star": 4, "imageUrl": "/assets/images/characters/Chongyun_Icon.webp" },
+      { "id": "char_028", "name": "Diona", "star": 4, "imageUrl": "/assets/images/characters/Diona_Icon.webp" }
+    ]
+  }
 ]

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import charactersData from '../data/characters.json';
 
 
@@ -12,6 +12,20 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [videoSrc, setVideoSrc] = useState("");
+  const [useElementVideo, setUseElementVideo] = useState(true);
+  const [isElementalVideo, setIsElementalVideo] = useState(false);
+
+  const allCharacters = useMemo(() => {
+    return charactersData.flatMap(elementGroup => 
+      elementGroup.characters.map(char => ({
+        ...char,
+        element: elementGroup.element
+      }))
+    );
+  }, []);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // 1. Hàm khởi tạo bảng Bingo
   const generateNewBoard = () => {
@@ -19,7 +33,7 @@ export default function Home() {
     setPulledChars([]);
     setShowConfetti(false);
     // Xáo trộn toàn bộ 80+ nhân vật
-    const poolWithoutPaimon = charactersData.filter(char => char.name !== "Paimon");
+    const poolWithoutPaimon = allCharacters.filter(char => char.name !== "Paimon");
     const shuffled = [...poolWithoutPaimon].sort(() => 0.5 - Math.random());
     
     // Lấy 24 nhân vật ngẫu nhiên cho bảng
@@ -32,6 +46,8 @@ export default function Home() {
     const paimon = {
       id: "paimon",
       name: "Paimon",
+      star: 6,
+      element: "None",
       imageUrl: "/assets/images/paimon_icon.png", 
       isFree: true,
       isMarked: true 
@@ -47,30 +63,36 @@ export default function Home() {
   }, []);
 
   // 2. Logic quay Gacha
-  const revealResult = (availablePool: any[]) => {
-    if (availablePool.length === 0 || !isWishing) return;
+  // Hàm xử lý khi video kết thúc
+  const handleVideoEnded = () => {
+    if (useElementVideo && !isElementalVideo) {
+      // 1. Nếu vừa xong video Sao, chuyển sang video Nguyên tố
+      const element = currentWish?.element || "Pyro"; // Mặc định Pyro nếu lỗi
+      setVideoSrc(`/assets/videos/${element}_animation.mp4`); 
+      setIsElementalVideo(true);
+    } else {
+      // 2. Nếu đã xong video Nguyên tố, mới hiện kết quả
+      revealResult();
+      setIsElementalVideo(false); 
+    }
+  };
 
-    const randomIndex = Math.floor(Math.random() * availablePool.length);
-    const randomChar = availablePool[randomIndex];
+  const revealResult = () => {
+    if (!currentWish) return;
+    
+    const newBoard = board.map(item => 
+      item.name === currentWish.name ? { ...item, isMarked: true } : item
+    );
+    setBoard(newBoard);
+    setPulledChars(prev => [...prev, currentWish.name]);
 
-    if (randomChar) {
-      setCurrentWish(randomChar);
-      const newBoard = board.map(item => item.name === randomChar.name ? { ...item, isMarked: true } : item);
-      setBoard(newBoard);
-      setPulledChars(prev => [...prev, randomChar.name]);
+    // Âm thanh hiện nhân vật
+    const revealSound = new Audio('/assets/videos/wish_reveal.m4a');
+    revealSound.play().catch(e => {});
 
-      const revealSound = new Audio('/assets/videos/wish_reveal.m4a');
-      revealSound.volume = 0.5;
-      revealSound.play().catch(err => console.log(err));
-
-      if (checkWin(newBoard)) {
-        setShowConfetti(true); 
-   
-        setTimeout(() => {
-          setHasWon(true);
-        }, 1500); 
-        // ----------------------------------------------
-      }
+    if (checkWin(newBoard)) {
+      setShowConfetti(true);
+      setTimeout(() => setHasWon(true), 1500);
     }
 
     setShowVideo(false);
@@ -78,20 +100,30 @@ export default function Home() {
   };
 
   const handleWish = () => {
-    if (isWishing || hasWon) return;
-    const availablePool = charactersData.filter(char => !pulledChars.includes(char.name));
+    if (isWishing) return;
+    
+    const availablePool = allCharacters.filter(char => !pulledChars.includes(char.name));
     if (availablePool.length === 0) {
-      alert("Đã quay hết nhân vật!");
+      alert("Đã hết nhân vật để quay!");
       return;
     }
+
+    // Bốc thăm nhân vật NGAY TẠI ĐÂY
+    const randomIndex = Math.floor(Math.random() * availablePool.length);
+    const selectedChar = availablePool[randomIndex];
+
+    // Chọn video dựa trên star
+    const videoPath = selectedChar.star === 5 
+      ? "/assets/videos/5star_wish_animation.mp4" 
+      : "/assets/videos/4star_wish_animation.mp4";
+
+    setVideoSrc(videoPath);
+    setCurrentWish(selectedChar); // Lưu nhân vật vào state để revealResult dùng
     setIsWishing(true);
     setShowVideo(true);
   };
 
-  const handleSkip = () => {
-    const availablePool = charactersData.filter(char => !pulledChars.includes(char.name));
-    revealResult(availablePool);
-  };
+  const handleSkip = () => { revealResult(); };
 
   const toggleMark = (index: number) => {
     if (board[index].isFree) return;
@@ -142,6 +174,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative flex flex-col items-center py-8 px-4 font-['GenshinDrip'] overflow-hidden">
+      <link rel="preload" href="/assets/videos/5star_wish_animation.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/4star_wish_animation.mp4" as="video" type="video/mp4" />
       {/* Layer Background */}
       {/* Layer Background */}
       <div className="fixed inset-0 z-[-1]">
@@ -161,7 +195,7 @@ export default function Home() {
       <div className="flex flex-col lg:flex-row gap-12 items-center justify-center w-full max-w-6xl">
         
         {/* --- BẢNG BINGO --- */}
-        <div className="relative p-4 bg-[#1b1e23] border-[6px] border-[#323942] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div className="relative p-4 bg-[#1b1e23] border-[3px] border-[#DDD3C5] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)]">
           <div className="grid grid-cols-5 gap-1.5 md:gap-3">
             {board.map((char, index) => (
               <div 
@@ -169,13 +203,24 @@ export default function Home() {
                 onClick={() => toggleMark(index)} 
                 className={`
                   relative w-16 h-16 sm:w-24 sm:h-24 flex flex-col items-center justify-center 
-                  border-2 rounded-xl transition-all duration-500 overflow-hidden
-                  ${char.isMarked 
-                    ? 'border-[#f3d183] bg-[#f3d183]/20 shadow-[0_0_15px_rgba(243,209,131,0.4)]' 
-                    : 'border-[#3c4550] bg-[#252a31]'}
+                  border-2 rounded-xl transition-all duration-500 overflow-hidden cursor-pointer
+                  
+                  /* MÀU VIỀN: Sáng lên khi được chọn, mặc định là xám tối */
+                  ${char.isMarked ? 'border-[#f3d183] shadow-glow' : 'border-[#3c4550]'}
+
+                  /* MÀU NỀN PHÍA SAU NHÂN VẬT (LUÔN HIỂN THỊ) */
+                  ${char.star === 6
+                    ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' /* Paimon: Xanh dương đặc biệt */
+                    : char.star === 5 
+                      ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' /* 5 sao: Cam */
+                      : 'bg-gradient-to-b from-[#6A629F] to-[#A179C0]' /* 4 sao: Tím */
+                  }
                 `}
               >
-                {/* Ảnh nhân vật - Đã bỏ grayscale để luôn có màu */}
+                {/* LỚP PHỦ TỐI (Nếu chưa được chọn thì hơi mờ đi để dễ phân biệt) */}
+                <div className={`absolute inset-0 z-10 transition-opacity duration-500 ${char.isMarked ? 'opacity-0' : 'bg-black/40'}`} />
+
+                {/* ẢNH NHÂN VẬT */}
                 <img 
                   src={char.imageUrl} 
                   alt={char.name} 
@@ -302,7 +347,7 @@ export default function Home() {
                     <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
                       {pulledChars.map((charName, idx) => {
                         // Tìm dữ liệu nhân vật để lấy ảnh
-                        const charInfo = charactersData.find(c => c.name === charName);
+                        const charInfo = allCharacters.find(c => c.name === charName);
                         return (
                           <div key={idx} className="flex flex-col items-center gap-1 animate-in zoom-in duration-300">
                             <div className="relative w-full aspect-square bg-[#252a31] rounded-lg border-2 border-[#3c4550] overflow-hidden group hover:border-[#f3d183] transition-all">
@@ -325,13 +370,38 @@ export default function Home() {
             </div>
           )}
         </div>
-        {/* --- VIDEO WISH ANIMATION OVERLAY --- */}
+  
+        {/* --- VIDEO WISH ANIMATION (CỬA SỔ NHỎ) --- */}
         {showVideo && (
-          <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center">
-            <video autoPlay className="w-full h-full object-cover" onEnded={() => revealResult(charactersData.filter(c => !pulledChars.includes(c.name)))}>
-              <source src="/assets/videos/gacha_animation.mp4" type="video/mp4" />
-            </video>
-            <button onClick={handleSkip} className="absolute top-10 right-10 text-white/50 hover:text-white font-bold uppercase tracking-widest text-sm bg-black/20 px-4 py-2 rounded-full border border-white/10">Skip {">>"}</button>
+          <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300">
+            
+            {/* Container cho Video - Tỉ lệ 16:9 chuẩn Genshin */}
+            <div className="relative w-full max-w-[800px] aspect-video bg-black rounded-2xl border-[3px] border-[#ffffff] shadow-[0_0_50px_rgba(221,200,136,0.5)] overflow-hidden animate-in zoom-in duration-300">
+              
+              <video 
+                ref={videoRef}
+                key={videoSrc}
+                autoPlay 
+                className="w-full h-full object-contain" // object-contain để không bị mất góc video
+                onLoadedMetadata={() => {
+                  if (videoRef.current) videoRef.current.playbackRate = 1.25; // Giữ tốc độ nhanh
+                }}
+                onEnded={handleVideoEnded}
+              >
+                <source src={videoSrc} type="video/mp4" />
+              </video>
+
+              {/* Nút Skip nhỏ gọn hơn */}
+              <button 
+                onClick={revealResult}
+                className="absolute top-4 right-4 z-[110] text-white/70 hover:text-white font-bold uppercase tracking-widest text-[10px] bg-black/40 px-3 py-1.5 rounded-full border border-white/20 transition-all hover:bg-black/60"
+              >
+                Skip {">>"}
+              </button>
+
+              {/* Hiệu ứng viền mờ bên trong video cho sang */}
+              <div className="absolute inset-0 pointer-events-none border-[12px] border-black/10 inset-shadow-sm" />
+            </div>
           </div>
         )}
         {/* --- PHÁO BÔNG OVERLAY (NEW EFFECT) --- */}
@@ -352,16 +422,43 @@ export default function Home() {
             ))}
           </div>
         )}
+
+        {hasWon && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[70] animate-in fade-in duration-500">
+            <div className="bg-white border-4 border-[#ddc888] p-10 rounded-3xl text-center shadow-[0_0_50px_rgba(221,200,136,0.6)] animate-in zoom-in duration-300">
+              <h2 className="text-5xl font-black text-[#4a3512] mb-4 uppercase drop-shadow-[0_2px_4px_rgba(221,200,136,0.5)]">BINGO!</h2>
+              <p className="text-[#c4b17a] text-xl mb-8 font-bold uppercase tracking-widest">Chúc mừng Nhà Lữ Hành đã thắng!</p>
+              <div className="flex flex-col gap-4">
+                <button 
+                  onClick={generateNewBoard}
+                  className="px-10 py-4 bg-[#f3d183] text-[#4a3512] font-bold rounded-full hover:scale-105 transition-transform uppercase border-2 border-[#ddc888]"
+                >
+                  VÁN MỚI
+                </button>
+                <button 
+                  onClick={() => {
+                    setHasWon(false);
+                    setShowConfetti(false); // Tắt pháo bông khi hủy
+                  }} 
+                  className="text-gray-400 hover:text-[#4a3512] text-sm font-bold uppercase tracking-widest transition-colors"
+                >
+                  Hủy
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         
       </div>
 
-      <style jsx>{`
+      <style jsx global>{`
         .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .shadow-glow { box-shadow: 0 0 10px #f3d183; }
         @font-face {
           font-family: 'GenshinDrip';
-          src: url('/fonts/Genshin Impact DRIP FONT.otf') format('opentype');
+          src: url('assets/fonts/Genshin Impact DRIP FONT.otf') format('opentype'),
+               url('assets/fonts/Genshin Impact DRIP FONT.ttf') format('truetype');
           font-weight: normal;
           font-style: normal;
         }
@@ -415,31 +512,6 @@ export default function Home() {
           }
         }
       `}</style>
-      {hasWon && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[70] animate-in fade-in duration-500">
-          <div className="bg-[#1b1e23] border-4 border-[#f3d183] p-10 rounded-3xl text-center shadow-[0_0_50px_#f3d183] animate-in zoom-in duration-300">
-            <h2 className="text-5xl font-black text-[#f3d183] mb-4 uppercase tracking-tighter">BINGO!</h2>
-            <p className="text-white text-xl mb-8">Chúc mừng Nhà Lữ Hành!</p>
-            <div className="flex flex-col gap-4">
-              <button 
-                onClick={generateNewBoard}
-                className="px-10 py-4 bg-[#f3d183] text-black font-bold rounded-full hover:scale-105 transition-transform uppercase"
-              >
-                BẮT ĐẦU VÁN MỚI
-              </button>
-              <button 
-                onClick={() => {
-                  setHasWon(false);
-                  // Không tắt confetti ở đây để pháo bông tiếp tục rơi nếu user muốn xem bảng
-                }} 
-                className="text-gray-400 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors"
-              >
-                HỦY
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
