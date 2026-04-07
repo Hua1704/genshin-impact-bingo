@@ -294,6 +294,52 @@ export default function Home() {
           </div>
         </div>
       )}
+      {showConfetti && (
+          <div className="fixed inset-0 z-[65] pointer-events-none overflow-hidden">
+            {[...Array(50)].map((_, i) => (
+              <div
+                key={i}
+                className="confetti-particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  backgroundColor: ['#f3d183', '#ffffff', '#ddc888', '#ffeb3b'][i % 4],
+                  animationDelay: `${Math.random() * 2}s`,
+                  animationDuration: `${3 + Math.random() * 2}s`,
+                  "--x-end": `${(Math.random() - 0.5) * 200}px` // Tạo độ lệch ngang khi rơi
+                } as any}
+              />
+            ))}
+          </div>
+        )}
+      {hasWon && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[130] animate-in fade-in duration-500 p-4">
+          <div className="bg-white border-4 border-[#ddc888] p-6 md:p-10 rounded-3xl text-center shadow-[0_0_50px_rgba(221,200,136,0.6)] animate-in zoom-in duration-300 max-w-sm md:max-w-md w-full">
+            <h2 className="text-4xl md:text-5xl font-black text-[#4a3512] mb-4 uppercase drop-shadow-[0_2px_4px_rgba(221,200,136,0.5)]">
+              BINGO!
+            </h2>
+            <p className="text-[#c4b17a] text-lg md:text-xl mb-8 font-bold uppercase tracking-widest">
+              Chúc mừng Nhà Lữ Hành!
+            </p>
+            <div className="flex flex-col gap-4">
+              <button 
+                onClick={generateNewBoard}
+                className="w-full px-10 py-4 bg-[#f3d183] text-[#4a3512] font-bold rounded-full hover:scale-105 transition-transform uppercase border-2 border-[#ddc888] shadow-lg"
+              >
+                VÁN MỚI
+              </button>
+              <button 
+                onClick={() => {
+                  setHasWon(false);
+                  setShowConfetti(false);
+                }} 
+                className="text-gray-400 hover:text-[#4a3512] text-sm font-bold uppercase tracking-widest transition-colors"
+              >
+                Hủy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* CSS: Không đổi */}
       <style jsx global>{`
@@ -303,7 +349,7 @@ export default function Home() {
           src: url('assets/fonts/Genshin Impact DRIP FONT.otf') format('opentype');
           font-weight: normal; font-style: normal;
         }
-        .confetti-particle { position: absolute; width: 6px; height: 6px; top: -10px; border-radius: 2px; animation: fall linear forwards; }
+        .confetti-particle { position: absolute; width: 6px; height: 6px; top: -10px; border-radius: 2px; animation: fall linear infinite; }
         @keyframes fall { 
           0% { transform: translateY(0) rotate(0deg); opacity: 1; }
           100% { transform: translateY(110vh) translateX(var(--x-end)) rotate(720deg); opacity: 0; }
