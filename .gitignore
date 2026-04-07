@@ -41,6 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 # local assets
-public/assets/
+public/assets/tmps
 
 data/characters_old.json
