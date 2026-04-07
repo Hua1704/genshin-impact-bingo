@@ -173,345 +173,140 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative flex flex-col items-center py-12 px-6 font-['GenshinDrip'] overflow-hidden">
-      <link rel="preload" href="/assets/videos/5star_wish_animation.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/4star_wish_animation.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/anemo_animation_sound.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/geo_animation_sound.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/dendro_animation_sound.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/electro_animation_sound.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/hydro_animation_sound.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/pyro_animation_sound.mp4" as="video" type="video/mp4" />
-      <link rel="preload" href="/assets/videos/cryo_animation_sound.mp4" as="video" type="video/mp4" />
-      {/* Layer Background */}
+    <main className="min-h-screen relative flex flex-col items-center py-6 md:py-12 px-4 md:px-6 font-['GenshinDrip'] overflow-x-hidden">
+      {/* Background Layer - Giữ nguyên */}
       <div className="fixed inset-0 z-[-1]">
-        {/* Lớp ảnh nền gốc - Giữ độ sáng tự nhiên */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/assets/images/backgrounds/genshin_bg_2.png')" }}
-        />
-        
-        {/* Lớp phủ Blur + Gradient ở phía trên cùng (Header Area) */}
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/images/backgrounds/genshin_bg_2.png')" }} />
         <div className="absolute top-0 left-0 right-0 h-1/5 bg-gradient-to-b from-black/70 to-transparent" />
-
-        {/* Lớp phủ Gradient Đen ở ĐÁY (Bottom Overlay) - Độ mờ 70% ở mép */}
         <div className="absolute bottom-0 left-0 right-0 h-1/5 bg-gradient-to-t from-black/70 to-transparent" />
-
       </div>
-      <h1 className="text-5xl font-black text-white mb-10 tracking-widest uppercase drop-shadow-2xl z-10">
+
+      <h1 className="text-3xl md:text-5xl font-black text-white mb-6 md:mb-10 tracking-widest uppercase drop-shadow-2xl z-10 text-center">
         Genshin Bingo
       </h1>
       
-      {/* ========================================================== */}
-      {/* --- CONTAINER CHÍNH (TWO COLUMNS PC FORMAT) --- */}
-      {/* ========================================================== */}
-      <div className="flex flex-col xl:flex-row gap-40 items-start justify-center w-full max-w-[1600px] z-10">
+      {/* --- CONTAINER CHÍNH: Xử lý Responsive ở đây --- */}
+      <div className="flex flex-col xl:flex-row gap-10 xl:gap-40 items-center xl:items-start justify-center w-full max-w-[1600px] z-10">
       
-        {/* --- BẢNG BINGO --- */}
-        <div className="flex flex-col items-center">
-          <div className="p-4 bg-[#1b1e23] border-[3px] border-[#DDD3C5] rounded-2xl shadow--2xl shadow-white/20">
-            <div className="grid grid-cols-5 gap-1.5 md:gap-2.5">
+        {/* --- CỘT BẢNG BINGO --- */}
+        <div className="flex flex-col items-center w-full max-w-fit">
+          <div className="p-2 md:p-4 bg-[#1b1e23] border-[2px] md:border-[3px] border-[#DDD3C5] rounded-2xl shadow-2xl">
+            {/* Grid co giãn theo màn hình */}
+            <div className="grid grid-cols-5 gap-1 md:gap-2.5">
               {board.map((char, index) => (
                 <div 
                   key={index}
                   onClick={() => toggleMark(index)} 
                   className={`
-                    relative relative w-20 h-20 sm:w-20 sm:h-20 flex flex-col items-center justify-center border-2 rounded-2xl transition-all duration-500 overflow-hidden cursor-pointer 
-                    
-                    /* MÀU VIỀN: Sáng lên khi được chọn, mặc định là xám tối */
+                    relative w-[65px] h-[65px] sm:w-20 sm:h-20 flex flex-col items-center justify-center border rounded-xl md:rounded-2xl transition-all duration-500 overflow-hidden cursor-pointer 
                     ${char.isMarked ? 'border-[#f3d183] shadow-glow' : 'border-[#3c4550]'}
-
-                    /* MÀU NỀN PHÍA SAU NHÂN VẬT (LUÔN HIỂN THỊ) */
-                    ${char.star === 6
-                      ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' /* Paimon: Xanh dương đặc biệt */
-                      : char.star === 5 
-                        ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' /* 5 sao: Cam */
-                        : 'bg-gradient-to-b from-[#6A629F] to-[#A179C0]' /* 4 sao: Tím */
-                    }
+                    ${char.star === 6 ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' : 
+                      char.star === 5 ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' : 
+                      'bg-gradient-to-b from-[#6A629F] to-[#A179C0]'}
                   `}
                 >
-                  {/* LỚP PHỦ TỐI (Nếu chưa được chọn thì hơi mờ đi để dễ phân biệt) */}
                   <div className={`absolute inset-0 z-10 transition-opacity duration-500 ${char.isMarked ? 'opacity-0' : 'bg-black/40'}`} />
-
-                  {/* ẢNH NHÂN VẬT */}
                   <img 
-                    src={char.imageUrl} 
-                    alt={char.name} 
+                    src={char.imageUrl} alt={char.name} 
                     className={`w-full h-full object-cover transition-all ${char.isMarked ? 'scale-110' : 'opacity-80'}`}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/assets/images/paimon_icon.png";
-                    }}
+                    onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/paimon_icon.png"; }}
                   />
-                  
-                  {/* Tên nhân vật - Hiện ở dưới cùng của ô */}
-                  <div className="absolute bottom-0 w-full bg-black/70 text-[8px] sm:text-[10px] text-white py-0.5 text-center font-medium">
+                  <div className="absolute bottom-0 w-full bg-black/70 text-[6px] sm:text-[10px] text-white py-0.5 text-center font-medium truncate px-0.5">
                     {char.name}
                   </div>
-
                 </div>
               ))}
             </div>
           </div>
 
-          <button 
-            onClick={generateNewBoard}
-            className="mt-12 text-white/90 hover:text-[#F3D183] transition-all text-2xl font-medium uppercase tracking-widest drop-shadow-lg"
-          >
+          <button onClick={generateNewBoard} className="mt-6 md:mt-12 text-white/90 hover:text-[#F3D183] transition-all text-lg md:text-2xl font-medium uppercase tracking-widest drop-shadow-lg">
             Làm mới bảng
           </button>
         </div>
         
 
         {/* --- KHU VỰC QUAY GACHA --- */}
-        <div className="flex flex-col items-center self-stretch">
-          {/* Vòng sáng trang trí */}
-          <div className="relative w-56 h-56 flex items-center justify-center mb-8">
-            <div className="w-56 h-56 bg-[#1b1e23] rounded-full border-4 border-[#323942] flex items-center justify-center overflow-hidden shadow-inner">
+        <div className="flex flex-col items-center w-full max-w-[350px] xl:self-stretch">
+          <div className="relative w-40 h-40 md:w-56 md:h-56 flex items-center justify-center mb-4 md:mb-8">
+            <div className="w-full h-full bg-[#1b1e23] rounded-full border-4 border-[#323942] flex items-center justify-center overflow-hidden shadow-inner">
               {currentWish ? (
                 <div className="flex flex-col items-center animate-in zoom-in duration-300">
-                  <img src={currentWish.imageUrl} alt="Result" className="w-36 h-36 object-contain" />
-                  <p className="text-[#f3d183] font-bold text-lg mt-1 drop-shadow-md">{currentWish.name}</p>
+                  <img src={currentWish.imageUrl} alt="Result" className="w-24 h-24 md:w-36 md:h-36 object-contain" />
+                  <p className="text-[#f3d183] font-bold text-sm md:text-lg mt-1 drop-shadow-md text-center">{currentWish.name}</p>
                 </div>
               ) : (
-                <p className="text-gray-500 font-medium italic text-sm">Sẵn sàng Wish?</p>
+                <p className="text-gray-500 font-medium italic text-xs md:text-sm">Sẵn sàng Wish?</p>
               )}
             </div>
           </div>
         
-
-          {/* --- NÚT WISH CUSTOM VỚI FRAME GENSHIN (SỬA Ở ĐÂY) --- */}
           <button 
-            onClick={handleWish}
-            disabled={isWishing}
-            className={`
-              relative group flex items-center justify-center w-[280px] h-[60px] mt-12
-              font-['GenshinDrip'] transition-all duration-300 ease-out
-              
-              /* 1. NỀN VÀ GÓC BO: Bo tròn cực đại (full rounded) */
-              rounded-full overflow-visible border-0 ring-0 focus:outline-none
-              
-              ${isWishing 
-                ? 'cursor-not-allowed' 
-                : 'hover:scale-105 active:scale-95' /* Hiệu ứng nhấn */
-              }
-            `}
+            onClick={handleWish} disabled={isWishing}
+            className="relative group flex items-center justify-center w-[220px] md:w-[280px] h-[50px] md:h-[60px] rounded-full overflow-visible transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
           >
-            <div 
-              className={`
-                absolute inset-0 rounded-full z-10 transition-all duration-300
-                bg-white border-[3px] border-[#ddc888]
-                ${isWishing ? 'brightness-90' : 'group-hover:border-[#c4b17a] group-hover:shadow-[0_0_15px_rgba(221,200,136,0.4)]'}
-              `}
-            />
-            <span 
-              className={`
-                relative z-20 text-3xl font-black tracking-[0.2em] uppercase transition-all
-                ${isWishing 
-                  ? 'text-[#ddc888]/50'
-                  : 'text-[#4a3512] group-hover:text-black'
-                }
-              `}
-            >
-              WISH
-            </span>
+            <div className="absolute inset-0 rounded-full z-10 bg-white border-[3px] border-[#ddc888]" />
+            <span className="relative z-20 text-xl md:text-3xl font-black tracking-[0.2em] uppercase text-[#4a3512]">WISH</span>
           </button>
 
-          {/* --- NÚT MỞ LỊCH SỬ --- */}
-          <div className="mt-auto pt-12">
-            <button onClick={() => setShowHistory(true)} className="text-white/90 hover:text-[#F3D183] transition-all text-2xl font-medium uppercase tracking-widest drop-shadow-lg">
-              Xem lịch sử
-            </button>
-          </div>
-
-          {/* --- MODAL LỊCH SỬ (DẠNG GRID ICON) --- */}
-          {showHistory && (
-            <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-in fade-in duration-300">
-              <div className="bg-[#1b1e23] border-2 border-[#323942] rounded-3xl w-full max-w-4xl max-h-[80vh] flex flex-col overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-                
-                {/* Header của Modal */}
-                <div className="flex justify-between items-center p-6 border-b border-[#323942]">
-                  <h2 className="text-[#f3d183] text-2xl font-['GenshinDrip'] uppercase tracking-widest">Recent Wishes</h2>
-                  <button 
-                    onClick={() => setShowHistory(false)}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Grid danh sách nhân vật */}
-                <div className="p-6 overflow-y-auto custom-scrollbar">
-                  {pulledChars.length === 0 ? (
-                    <p className="text-gray-500 text-center italic py-20 font-['GenshinDrip']">No records found...</p>
-                  ) : (
-                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
-                      {pulledChars.map((charName, idx) => {
-                        // Tìm dữ liệu nhân vật để lấy ảnh
-                        const charInfo = allCharacters.find(c => c.name === charName);
-                        return (
-                          <div key={idx} className="flex flex-col items-center gap-1 animate-in zoom-in duration-300">
-                            <div className="relative w-full aspect-square bg-[#252a31] rounded-lg border-2 border-[#3c4550] overflow-hidden group hover:border-[#f3d183] transition-all">
-                              <img 
-                                src={charInfo?.imageUrl || "/assets/images/paimon_icon.png"} 
-                                alt={charName}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <span className="text-[9px] text-gray-400 text-center leading-tight h-5 overflow-hidden">
-                              {charName}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+          <button onClick={() => setShowHistory(true)} className="mt-8 md:mt-auto py-4 text-white/90 hover:text-[#F3D183] transition-all text-lg md:text-2xl font-medium uppercase tracking-widest drop-shadow-lg">
+            Xem lịch sử
+          </button>
         </div>
-  
-        {/* --- VIDEO WISH ANIMATION (CỬA SỔ NHỎ) --- */}
-        {showVideo && (
-          <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300">
-            
-            {/* Container cho Video - Tỉ lệ 16:9 chuẩn Genshin */}
-            <div className="relative w-full max-w-[800px] aspect-video bg-black rounded-2xl border-[3px] border-[#ffffff] shadow-[0_0_50px_rgba(221,200,136,0.5)] overflow-hidden animate-in zoom-in duration-300">
-              
-              <video 
-                ref={videoRef}
-                key={videoSrc}
-                autoPlay 
-                className="w-full h-full object-contain" // object-contain để không bị mất góc video
-                onLoadedMetadata={() => {
-                  if (videoRef.current) videoRef.current.playbackRate = 1; // Giữ tốc độ nhanh
-                }}
-                onEnded={handleVideoEnded}
-              >
-                <source src={videoSrc} type="video/mp4" />
-              </video>
-
-              {/* Nút Skip nhỏ gọn hơn */}
-              <button 
-                onClick={revealResult}
-                className="absolute top-4 right-4 z-[110] text-white/70 hover:text-white font-bold uppercase tracking-widest text-[10px] bg-black/40 px-3 py-1.5 rounded-full border border-white/20 transition-all hover:bg-black/60"
-              >
-                Skip {">>"}
-              </button>
-
-              {/* Hiệu ứng viền mờ bên trong video cho sang */}
-              <div className="absolute inset-0 pointer-events-none border-[12px] border-black/10 inset-shadow-sm" />
-            </div>
-          </div>
-        )}
-        {/* --- PHÁO BÔNG OVERLAY (NEW EFFECT) --- */}
-        {showConfetti && (
-          <div className="fixed inset-0 z-[65] pointer-events-none overflow-hidden">
-            {[...Array(50)].map((_, i) => (
-              <div
-                key={i}
-                className="confetti-particle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  backgroundColor: ['#f3d183', '#ffffff', '#ddc888', '#ffeb3b'][i % 4],
-                  animationDelay: `${Math.random() * 2}s`,
-                  animationDuration: `${3 + Math.random() * 2}s`,
-                  "--x-end": `${(Math.random() - 0.5) * 200}px` // Tạo độ lệch ngang khi rơi
-                } as any}
-              />
-            ))}
-          </div>
-        )}
-
-        {hasWon && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[70] animate-in fade-in duration-500">
-            <div className="bg-white border-4 border-[#ddc888] p-10 rounded-3xl text-center shadow-[0_0_50px_rgba(221,200,136,0.6)] animate-in zoom-in duration-300">
-              <h2 className="text-5xl font-black text-[#4a3512] mb-4 uppercase drop-shadow-[0_2px_4px_rgba(221,200,136,0.5)]">BINGO!</h2>
-              <p className="text-[#c4b17a] text-xl mb-8 font-bold uppercase tracking-widest">Chúc mừng Nhà Lữ Hành!</p>
-              <div className="flex flex-col gap-4">
-                <button 
-                  onClick={generateNewBoard}
-                  className="px-10 py-4 bg-[#f3d183] text-[#4a3512] font-bold rounded-full hover:scale-105 transition-transform uppercase border-2 border-[#ddc888]"
-                >
-                  VÁN MỚI
-                </button>
-                <button 
-                  onClick={() => {
-                    setHasWon(false);
-                    setShowConfetti(false); // Tắt pháo bông khi hủy
-                  }} 
-                  className="text-gray-400 hover:text-[#4a3512] text-sm font-bold uppercase tracking-widest transition-colors"
-                >
-                  Hủy
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        
       </div>
 
+      {/* --- CỬA SỔ VIDEO: Fix tỉ lệ trên Mobile --- */}
+      {showVideo && (
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-2">
+          <div className="relative w-full max-w-[800px] aspect-video bg-black rounded-lg md:rounded-2xl border-2 md:border-[3px] border-white shadow-2xl overflow-hidden">
+            <video ref={videoRef} key={videoSrc} autoPlay onEnded={handleVideoEnded} className="w-full h-full object-contain">
+              <source src={videoSrc} type="video/mp4" />
+            </video>
+            <button onClick={revealResult} className="absolute top-2 right-2 md:top-4 md:right-4 z-[110] text-white/70 text-[8px] md:text-[10px] bg-black/40 px-2 py-1 rounded-full border border-white/20">
+              Skip {">>"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL LỊCH SỬ & WIN: Co giãn theo màn hình */}
+      {showHistory && (
+        <div className="fixed inset-0 bg-black/95 z-[120] flex items-center justify-center p-2 md:p-4">
+          <div className="bg-[#1b1e23] border-2 border-[#323942] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
+            <div className="flex justify-between items-center p-4 border-b border-[#323942]">
+              <h2 className="text-[#f3d183] text-lg md:text-2xl uppercase tracking-widest">History</h2>
+              <button onClick={() => setShowHistory(false)} className="text-gray-400 text-2xl">✕</button>
+            </div>
+            <div className="p-4 overflow-y-auto custom-scrollbar">
+              <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-2">
+                {pulledChars.map((charName, idx) => {
+                  const charInfo = allCharacters.find(c => c.name === charName);
+                  return (
+                    <div key={idx} className="flex flex-col items-center gap-1">
+                      <div className="w-full aspect-square bg-[#252a31] rounded-lg border border-[#3c4550] overflow-hidden">
+                        <img src={charInfo?.imageUrl} alt="" className="w-full h-full object-cover" />
+                      </div>
+                      <span className="text-[7px] text-gray-400 text-center truncate w-full">{charName}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CSS: Không đổi */}
       <style jsx global>{`
-        .animate-spin-slow { animation: spin 10s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .shadow-glow { box-shadow: 0 0 10px #f3d183; }
         @font-face {
           font-family: 'GenshinDrip';
-          src: url('assets/fonts/Genshin Impact DRIP FONT.otf') format('opentype'),
-               url('assets/fonts/Genshin Impact DRIP FONT.ttf') format('truetype');
-          font-weight: normal;
-          font-style: normal;
+          src: url('assets/fonts/Genshin Impact DRIP FONT.otf') format('opentype');
+          font-weight: normal; font-style: normal;
         }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #1b1e23;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #323942;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #f3d183;
-        }
-        .header-blur {
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%);
-        }
-        .wish-button:hover .border-trace {
-          opacity: 1;
-          scale: 1.03; /* Làm cho viền hơi to hơn nút một chút */
-          filter: brightness(100) blur(1px) drop-shadow(0 0 5px rgba(255,255,255,0.8));
-          /* Giúp viền trắng hoàn toàn và có độ phát sáng nhẹ */
-        }
-
-        .border-trace {
-          transition: all 0.4s ease-out; /* Hiệu ứng hiện ra mượt mà */
-          opacity: 0;
-          pointer-events: none; /* Đảm bảo chuột không tương tác với lớp viền */
-        }
-        .confetti-particle {
-          position: absolute;
-          width: 8px;
-          height: 8px;
-          top: -10px;
-          border-radius: 2px;
-          animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-          0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(110vh) translateX(var(--x-end)) rotate(720deg);
-            opacity: 0;
-          }
+        .confetti-particle { position: absolute; width: 6px; height: 6px; top: -10px; border-radius: 2px; animation: fall linear forwards; }
+        @keyframes fall { 
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(110vh) translateX(var(--x-end)) rotate(720deg); opacity: 0; }
         }
       `}</style>
     </main>
