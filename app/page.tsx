@@ -68,7 +68,7 @@ export default function Home() {
     if (useElementVideo && !isElementalVideo) {
       // 1. Nếu vừa xong video Sao, chuyển sang video Nguyên tố
       const element = currentWish?.element || "Pyro"; // Mặc định Pyro nếu lỗi
-      setVideoSrc(`/assets/videos/${element}_animation.mp4`); 
+      setVideoSrc(`/assets/videos/${element}_animation_sound.mp4`); 
       setIsElementalVideo(true);
     } else {
       // 2. Nếu đã xong video Nguyên tố, mới hiện kết quả
@@ -173,10 +173,16 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative flex flex-col items-center py-8 px-4 font-['GenshinDrip'] overflow-hidden">
+    <main className="min-h-screen relative flex flex-col items-center py-12 px-6 font-['GenshinDrip'] overflow-hidden">
       <link rel="preload" href="/assets/videos/5star_wish_animation.mp4" as="video" type="video/mp4" />
       <link rel="preload" href="/assets/videos/4star_wish_animation.mp4" as="video" type="video/mp4" />
-      {/* Layer Background */}
+      <link rel="preload" href="/assets/videos/anemo_animation_sound.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/geo_animation_sound.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/dendro_animation_sound.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/electro_animation_sound.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/hydro_animation_sound.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/pyro_animation_sound.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/assets/videos/cryo_animation_sound.mp4" as="video" type="video/mp4" />
       {/* Layer Background */}
       <div className="fixed inset-0 z-[-1]">
         {/* Lớp ảnh nền gốc - Giữ độ sáng tự nhiên */}
@@ -186,70 +192,84 @@ export default function Home() {
         />
         
         {/* Lớp phủ Blur + Gradient ở phía trên cùng (Header Area) */}
-        <div className="absolute top-0 left-0 right-0 h-64 bg-black/20 backdrop-blur-md [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+        <div className="absolute top-0 left-0 right-0 h-1/5 bg-gradient-to-b from-black/70 to-transparent" />
+
+        {/* Lớp phủ Gradient Đen ở ĐÁY (Bottom Overlay) - Độ mờ 70% ở mép */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/5 bg-gradient-to-t from-black/70 to-transparent" />
+
       </div>
-      <h1 className="text-3xl md:text-5xl font-black text-white mb-10 tracking-widest uppercase drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] z-10">
+      <h1 className="text-5xl font-black text-white mb-10 tracking-widest uppercase drop-shadow-2xl z-10">
         Genshin Bingo
       </h1>
-
-      <div className="flex flex-col lg:flex-row gap-12 items-center justify-center w-full max-w-6xl">
-        
+      
+      {/* ========================================================== */}
+      {/* --- CONTAINER CHÍNH (TWO COLUMNS PC FORMAT) --- */}
+      {/* ========================================================== */}
+      <div className="flex flex-col xl:flex-row gap-40 items-start justify-center w-full max-w-[1600px] z-10">
+      
         {/* --- BẢNG BINGO --- */}
-        <div className="relative p-4 bg-[#1b1e23] border-[3px] border-[#DDD3C5] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-          <div className="grid grid-cols-5 gap-1.5 md:gap-3">
-            {board.map((char, index) => (
-              <div 
-                key={index}
-                onClick={() => toggleMark(index)} 
-                className={`
-                  relative w-16 h-16 sm:w-24 sm:h-24 flex flex-col items-center justify-center 
-                  border-2 rounded-xl transition-all duration-500 overflow-hidden cursor-pointer
+        <div className="flex flex-col items-center">
+          <div className="p-4 bg-[#1b1e23] border-[3px] border-[#DDD3C5] rounded-2xl shadow--2xl shadow-white/20">
+            <div className="grid grid-cols-5 gap-1.5 md:gap-2.5">
+              {board.map((char, index) => (
+                <div 
+                  key={index}
+                  onClick={() => toggleMark(index)} 
+                  className={`
+                    relative relative w-20 h-20 sm:w-20 sm:h-20 flex flex-col items-center justify-center border-2 rounded-2xl transition-all duration-500 overflow-hidden cursor-pointer 
+                    
+                    /* MÀU VIỀN: Sáng lên khi được chọn, mặc định là xám tối */
+                    ${char.isMarked ? 'border-[#f3d183] shadow-glow' : 'border-[#3c4550]'}
+
+                    /* MÀU NỀN PHÍA SAU NHÂN VẬT (LUÔN HIỂN THỊ) */
+                    ${char.star === 6
+                      ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' /* Paimon: Xanh dương đặc biệt */
+                      : char.star === 5 
+                        ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' /* 5 sao: Cam */
+                        : 'bg-gradient-to-b from-[#6A629F] to-[#A179C0]' /* 4 sao: Tím */
+                    }
+                  `}
+                >
+                  {/* LỚP PHỦ TỐI (Nếu chưa được chọn thì hơi mờ đi để dễ phân biệt) */}
+                  <div className={`absolute inset-0 z-10 transition-opacity duration-500 ${char.isMarked ? 'opacity-0' : 'bg-black/40'}`} />
+
+                  {/* ẢNH NHÂN VẬT */}
+                  <img 
+                    src={char.imageUrl} 
+                    alt={char.name} 
+                    className={`w-full h-full object-cover transition-all ${char.isMarked ? 'scale-110' : 'opacity-80'}`}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/assets/images/paimon_icon.png";
+                    }}
+                  />
                   
-                  /* MÀU VIỀN: Sáng lên khi được chọn, mặc định là xám tối */
-                  ${char.isMarked ? 'border-[#f3d183] shadow-glow' : 'border-[#3c4550]'}
+                  {/* Tên nhân vật - Hiện ở dưới cùng của ô */}
+                  <div className="absolute bottom-0 w-full bg-black/70 text-[8px] sm:text-[10px] text-white py-0.5 text-center font-medium">
+                    {char.name}
+                  </div>
 
-                  /* MÀU NỀN PHÍA SAU NHÂN VẬT (LUÔN HIỂN THỊ) */
-                  ${char.star === 6
-                    ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' /* Paimon: Xanh dương đặc biệt */
-                    : char.star === 5 
-                      ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' /* 5 sao: Cam */
-                      : 'bg-gradient-to-b from-[#6A629F] to-[#A179C0]' /* 4 sao: Tím */
-                  }
-                `}
-              >
-                {/* LỚP PHỦ TỐI (Nếu chưa được chọn thì hơi mờ đi để dễ phân biệt) */}
-                <div className={`absolute inset-0 z-10 transition-opacity duration-500 ${char.isMarked ? 'opacity-0' : 'bg-black/40'}`} />
-
-                {/* ẢNH NHÂN VẬT */}
-                <img 
-                  src={char.imageUrl} 
-                  alt={char.name} 
-                  className={`w-full h-full object-cover transition-all ${char.isMarked ? 'scale-110' : 'opacity-80'}`}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/assets/images/paimon_icon.png";
-                  }}
-                />
-                
-                {/* Tên nhân vật - Hiện ở dưới cùng của ô */}
-                <div className="absolute bottom-0 w-full bg-black/70 text-[8px] sm:text-[10px] text-white py-0.5 text-center font-medium">
-                  {char.name}
                 </div>
-
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          <button 
+            onClick={generateNewBoard}
+            className="mt-12 text-white/90 hover:text-[#F3D183] transition-all text-2xl font-medium uppercase tracking-widest drop-shadow-lg"
+          >
+            Làm mới bảng
+          </button>
         </div>
+        
 
         {/* --- KHU VỰC QUAY GACHA --- */}
-        <div className="flex flex-col items-center min-w-[300px]">
+        <div className="flex flex-col items-center self-stretch">
+          {/* Vòng sáng trang trí */}
           <div className="relative w-56 h-56 flex items-center justify-center mb-8">
-            {/* Vòng sáng trang trí */}
-            <div className={`absolute inset-0 rounded-full border-4 border-dashed border-[#f3d183]/20 ${isWishing ? 'animate-spin-slow' : ''}`}></div>
-            
-            <div className="w-48 h-48 bg-[#1b1e23] rounded-full border-4 border-[#323942] flex items-center justify-center overflow-hidden shadow-inner">
+            <div className="w-56 h-56 bg-[#1b1e23] rounded-full border-4 border-[#323942] flex items-center justify-center overflow-hidden shadow-inner">
               {currentWish ? (
                 <div className="flex flex-col items-center animate-in zoom-in duration-300">
-                  <img src={currentWish.imageUrl} alt="Result" className="w-32 h-32 object-contain" />
+                  <img src={currentWish.imageUrl} alt="Result" className="w-36 h-36 object-contain" />
                   <p className="text-[#f3d183] font-bold text-lg mt-1 drop-shadow-md">{currentWish.name}</p>
                 </div>
               ) : (
@@ -257,13 +277,14 @@ export default function Home() {
               )}
             </div>
           </div>
+        
 
           {/* --- NÚT WISH CUSTOM VỚI FRAME GENSHIN (SỬA Ở ĐÂY) --- */}
           <button 
             onClick={handleWish}
             disabled={isWishing}
             className={`
-              relative group flex items-center justify-center w-[280px] h-[72px]
+              relative group flex items-center justify-center w-[280px] h-[60px] mt-12
               font-['GenshinDrip'] transition-all duration-300 ease-out
               
               /* 1. NỀN VÀ GÓC BO: Bo tròn cực đại (full rounded) */
@@ -282,12 +303,6 @@ export default function Home() {
                 ${isWishing ? 'brightness-90' : 'group-hover:border-[#c4b17a] group-hover:shadow-[0_0_15px_rgba(221,200,136,0.4)]'}
               `}
             />
-
-            <div 
-              className="absolute inset-[6px] rounded-full z-15 border border-[#ddc888]/30 pointer-events-none" 
-            />
-
-            {/* 4. CHỮ WISH - Nằm trên cùng */}
             <span 
               className={`
                 relative z-20 text-3xl font-black tracking-[0.2em] uppercase transition-all
@@ -299,27 +314,14 @@ export default function Home() {
             >
               WISH
             </span>
-        
-            <div className="absolute inset-x-6 inset-y-2 border border-[#f3d183]/30 rounded-full z-15 group-hover:border-white/20 transition-all" />
-          </button>
-
-          <button 
-            onClick={generateNewBoard}
-            className="mt-6 text-white hover:text-[#f3d183] transition-all text-sm font-bold uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
-          >
-            Làm mới bảng Bingo
           </button>
 
           {/* --- NÚT MỞ LỊCH SỬ --- */}
-          <button 
-            onClick={() => setShowHistory(true)}
-            className="mt-4 flex items-center gap-2 bg-[#323942] hover:bg-[#3c4550] text-[#f3d183] px-6 py-2 rounded-lg border border-[#f3d183]/30 transition-all font-['GenshinDrip']"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-            </svg>
-            HISTORY
-          </button>
+          <div className="mt-auto pt-12">
+            <button onClick={() => setShowHistory(true)} className="text-white/90 hover:text-[#F3D183] transition-all text-2xl font-medium uppercase tracking-widest drop-shadow-lg">
+              Xem lịch sử
+            </button>
+          </div>
 
           {/* --- MODAL LỊCH SỬ (DẠNG GRID ICON) --- */}
           {showHistory && (
@@ -384,7 +386,7 @@ export default function Home() {
                 autoPlay 
                 className="w-full h-full object-contain" // object-contain để không bị mất góc video
                 onLoadedMetadata={() => {
-                  if (videoRef.current) videoRef.current.playbackRate = 1.25; // Giữ tốc độ nhanh
+                  if (videoRef.current) videoRef.current.playbackRate = 1; // Giữ tốc độ nhanh
                 }}
                 onEnded={handleVideoEnded}
               >
@@ -427,7 +429,7 @@ export default function Home() {
           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[70] animate-in fade-in duration-500">
             <div className="bg-white border-4 border-[#ddc888] p-10 rounded-3xl text-center shadow-[0_0_50px_rgba(221,200,136,0.6)] animate-in zoom-in duration-300">
               <h2 className="text-5xl font-black text-[#4a3512] mb-4 uppercase drop-shadow-[0_2px_4px_rgba(221,200,136,0.5)]">BINGO!</h2>
-              <p className="text-[#c4b17a] text-xl mb-8 font-bold uppercase tracking-widest">Chúc mừng Nhà Lữ Hành đã thắng!</p>
+              <p className="text-[#c4b17a] text-xl mb-8 font-bold uppercase tracking-widest">Chúc mừng Nhà Lữ Hành!</p>
               <div className="flex flex-col gap-4">
                 <button 
                   onClick={generateNewBoard}
