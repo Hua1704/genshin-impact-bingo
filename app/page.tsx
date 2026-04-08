@@ -174,87 +174,99 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative flex flex-col items-center py-6 md:py-12 px-4 md:px-6 font-['GenshinDrip'] overflow-x-hidden">
-      {/* Background Layer - Giữ nguyên */}
+      {/* Background Layer */}
       <div className="fixed inset-0 z-[-1]">
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/images/backgrounds/genshin_bg_2.png')" }} />
         <div className="absolute top-0 left-0 right-0 h-1/5 bg-gradient-to-b from-black/70 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-1/5 bg-gradient-to-t from-black/70 to-transparent" />
       </div>
 
-      <h1 className="text-3xl md:text-5xl font-black text-white mb-6 md:mb-10 tracking-widest uppercase drop-shadow-2xl z-10 text-center">
+      <h1 className="text-3xl md:text-5xl font-black text-white mb-8 md:mb-12 tracking-widest uppercase drop-shadow-2xl z-10 text-center">
         Genshin Bingo
       </h1>
       
-      {/* --- CONTAINER CHÍNH: Xử lý Responsive ở đây --- */}
-      <div className="flex flex-col xl:flex-row gap-10 xl:gap-40 items-center xl:items-start justify-center w-full max-w-[1600px] z-10">
-      
-        {/* --- CỘT BẢNG BINGO --- */}
-        <div className="flex flex-col items-center w-full max-w-fit">
-          <div className="p-2 md:p-4 bg-[#1b1e23] border-[2px] md:border-[3px] border-[#DDD3C5] rounded-2xl shadow-2xl">
-            {/* Grid co giãn theo màn hình */}
-            <div className="grid grid-cols-5 gap-1 md:gap-2.5">
-              {board.map((char, index) => (
-                <div 
-                  key={index}
-                  onClick={() => toggleMark(index)} 
-                  className={`
-                    relative w-[65px] h-[65px] sm:w-20 sm:h-20 flex flex-col items-center justify-center border rounded-xl md:rounded-2xl transition-all duration-500 overflow-hidden cursor-pointer 
-                    ${char.isMarked ? 'border-[#f3d183] shadow-glow' : 'border-[#3c4550]'}
-                    ${char.star === 6 ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' : 
-                      char.star === 5 ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' : 
-                      'bg-gradient-to-b from-[#6A629F] to-[#A179C0]'}
-                  `}
-                >
-                  <div className={`absolute inset-0 z-10 transition-opacity duration-500 ${char.isMarked ? 'opacity-0' : 'bg-black/40'}`} />
-                  <img 
-                    src={char.imageUrl} alt={char.name} 
-                    className={`w-full h-full object-cover transition-all ${char.isMarked ? 'scale-110' : 'opacity-80'}`}
-                    onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/paimon_icon.png"; }}
-                  />
-                  <div className="absolute bottom-0 w-full bg-black/70 text-[6px] sm:text-[10px] text-white py-0.5 text-center font-medium truncate px-0.5">
-                    {char.name}
+      {/* --- WRAPPER CHÍNH --- */}
+      <div className="flex flex-col items-center justify-center w-full max-w-[1400px] z-10 gap-12 md:gap-16">
+        
+        {/* HÀNG CHỨA BẢNG VÀ GACHA */}
+        <div className="flex flex-col xl:flex-row items-center xl:items-start justify-center w-full gap-10 xl:gap-32">
+          
+          {/* CỘT BẢNG BINGO */}
+          <div className="flex flex-col items-center">
+            <div className="p-2 md:p-4 bg-[#1b1e23] border-[2px] md:border-[3px] border-[#DDD3C5] rounded-2xl shadow-2xl">
+              <div className="grid grid-cols-5 gap-1 md:gap-2.5">
+                {board.map((char, index) => (
+                  <div 
+                    key={index}
+                    onClick={() => toggleMark(index)} 
+                    className={`
+                      relative w-[65px] h-[65px] sm:w-20 sm:h-20 flex flex-col items-center justify-center border rounded-xl md:rounded-2xl transition-all duration-500 overflow-hidden cursor-pointer 
+                      ${char.isMarked ? 'border-[#f3d183] shadow-glow' : 'border-[#3c4550]'}
+                      ${char.star === 6 ? 'bg-gradient-to-b from-[#1D1C55] to-[#5C87C1]' : 
+                        char.star === 5 ? 'bg-gradient-to-b from-[#9E7040] to-[#BF7E3E]' : 
+                        'bg-gradient-to-b from-[#6A629F] to-[#A179C0]'}
+                    `}
+                  >
+                    <div className={`absolute inset-0 z-10 transition-opacity duration-500 ${char.isMarked ? 'opacity-0' : 'bg-black/40'}`} />
+                    <img 
+                      src={char.imageUrl} alt={char.name} 
+                      className={`w-full h-full object-cover transition-all ${char.isMarked ? 'scale-110' : 'opacity-80'}`}
+                      onError={(e) => { (e.target as HTMLImageElement).src = "/assets/images/paimon_icon.png"; }}
+                    />
+                    <div className="absolute bottom-0 w-full bg-black/70 text-[6px] sm:text-[10px] text-white py-0.5 text-center font-medium truncate px-0.5">
+                      {char.name}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
-          <button onClick={generateNewBoard} className="mt-6 md:mt-12 text-white/90 hover:text-[#F3D183] transition-all text-lg md:text-2xl font-medium uppercase tracking-widest drop-shadow-lg">
+          {/* CỘT KHU VỰC QUAY GACHA */}
+          <div className="flex flex-col items-center w-full max-w-[350px] xl:mr-10 gap-6">
+            <div className="relative w-40 h-40 md:w-56 md:h-56 flex items-center justify-center mb-6 md:mb-10">
+              <div className="w-full h-full bg-[#1b1e23] rounded-full border-4 border-[#323942] flex items-center justify-center overflow-hidden shadow-inner">
+                {currentWish ? (
+                  <div className="flex flex-col items-center animate-in zoom-in duration-300">
+                    <img src={currentWish.imageUrl} alt="Result" className="w-24 h-24 md:w-36 md:h-36 object-contain" />
+                    <p className="text-[#f3d183] font-bold text-sm md:text-lg mt-1 drop-shadow-md text-center">{currentWish.name}</p>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 font-medium italic text-xs md:text-sm">Sẵn sàng Wish?</p>
+                )}
+              </div>
+            </div>
+          
+            <button 
+              onClick={handleWish} disabled={isWishing}
+              className="relative group flex items-center justify-center w-[220px] md:w-[280px] h-[50px] md:h-[60px] rounded-full overflow-visible transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+            >
+              <div className="absolute inset-0 rounded-full z-10 bg-white border-[3px] border-[#ddc888]" />
+              <span className="relative z-20 text-xl md:text-3xl font-black tracking-[0.2em] uppercase text-[#4a3512]">WISH</span>
+            </button>
+          </div>
+        </div>
+
+        {/* HÀNG NÚT PHỤ (LUÔN CANH NGANG HÀNG Ở DƯỚI CÙNG) */}
+        <div className="flex flex-col sm:flex-row items-center justify-between w-full xl:max-w-[960px] gap-4 sm:gap-0 mt-0 md:mt-0">
+          <button 
+            onClick={generateNewBoard} 
+            className="text-white/90 hover:text-[#F3D183] transition-all text-xl md:text-2xl font-medium uppercase tracking-widest drop-shadow-lg xl:ml-24"
+          >
             Làm mới bảng
           </button>
-        </div>
-        
 
-        {/* --- KHU VỰC QUAY GACHA --- */}
-        <div className="flex flex-col items-center w-full max-w-[350px] xl:self-stretch">
-          <div className="relative w-40 h-40 md:w-56 md:h-56 flex items-center justify-center mb-4 md:mb-8">
-            <div className="w-full h-full bg-[#1b1e23] rounded-full border-4 border-[#323942] flex items-center justify-center overflow-hidden shadow-inner">
-              {currentWish ? (
-                <div className="flex flex-col items-center animate-in zoom-in duration-300">
-                  <img src={currentWish.imageUrl} alt="Result" className="w-24 h-24 md:w-36 md:h-36 object-contain" />
-                  <p className="text-[#f3d183] font-bold text-sm md:text-lg mt-1 drop-shadow-md text-center">{currentWish.name}</p>
-                </div>
-              ) : (
-                <p className="text-gray-500 font-medium italic text-xs md:text-sm">Sẵn sàng Wish?</p>
-              )}
-            </div>
-          </div>
-        
           <button 
-            onClick={handleWish} disabled={isWishing}
-            className="relative group flex items-center justify-center w-[220px] md:w-[280px] h-[50px] md:h-[60px] rounded-full overflow-visible transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+            onClick={() => setShowHistory(true)} 
+            className="text-white/90 hover:text-[#F3D183] transition-all text-xl md:text-2xl font-medium uppercase tracking-widest drop-shadow-lg xl:mr-24"
           >
-            <div className="absolute inset-0 rounded-full z-10 bg-white border-[3px] border-[#ddc888]" />
-            <span className="relative z-20 text-xl md:text-3xl font-black tracking-[0.2em] uppercase text-[#4a3512]">WISH</span>
-          </button>
-
-          <button onClick={() => setShowHistory(true)} className="mt-8 md:mt-auto py-4 text-white/90 hover:text-[#F3D183] transition-all text-lg md:text-2xl font-medium uppercase tracking-widest drop-shadow-lg">
             Xem lịch sử
           </button>
         </div>
+
       </div>
 
-      {/* --- CỬA SỔ VIDEO: Fix tỉ lệ trên Mobile --- */}
+      {/* --- VIDEO --- */}
       {showVideo && (
         <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-2">
           <div className="relative w-full max-w-[800px] aspect-video bg-black rounded-lg md:rounded-2xl border-2 md:border-[3px] border-white shadow-2xl overflow-hidden">
@@ -268,7 +280,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* MODAL LỊCH SỬ & WIN: Co giãn theo màn hình */}
+      {/* --- HISTORY MODAL --- */}
       {showHistory && (
         <div className="fixed inset-0 bg-black/95 z-[120] flex items-center justify-center p-2 md:p-4">
           <div className="bg-[#1b1e23] border-2 border-[#323942] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl">
@@ -294,6 +306,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* --- CONFETTI --- */}
       {showConfetti && (
           <div className="fixed inset-0 z-[65] pointer-events-none overflow-hidden">
             {[...Array(50)].map((_, i) => (
@@ -305,12 +319,14 @@ export default function Home() {
                   backgroundColor: ['#f3d183', '#ffffff', '#ddc888', '#ffeb3b'][i % 4],
                   animationDelay: `${Math.random() * 2}s`,
                   animationDuration: `${3 + Math.random() * 2}s`,
-                  "--x-end": `${(Math.random() - 0.5) * 200}px` // Tạo độ lệch ngang khi rơi
+                  "--x-end": `${(Math.random() - 0.5) * 200}px`
                 } as any}
               />
             ))}
           </div>
         )}
+
+      {/* --- WIN MODAL --- */}
       {hasWon && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[130] animate-in fade-in duration-500 p-4">
           <div className="bg-white border-4 border-[#ddc888] p-6 md:p-10 rounded-3xl text-center shadow-[0_0_50px_rgba(221,200,136,0.6)] animate-in zoom-in duration-300 max-w-sm md:max-w-md w-full">
@@ -341,7 +357,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* CSS: Không đổi */}
       <style jsx global>{`
         .shadow-glow { box-shadow: 0 0 10px #f3d183; }
         @font-face {
