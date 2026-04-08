@@ -173,7 +173,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative flex flex-col items-center py-6 md:py-12 px-4 md:px-6 font-['GenshinDrip'] overflow-x-hidden">
+    <main className="min-h-screen relative flex flex-col items-center py-6 md:py-12 px-4 md:px-6 font-['GenshinCN'] overflow-x-hidden">
       {/* Background Layer */}
       <div className="fixed inset-0 z-[-1]">
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/images/backgrounds/genshin_bg_2.png')" }} />
@@ -181,7 +181,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-1/5 bg-gradient-to-t from-black/70 to-transparent" />
       </div>
 
-      <h1 className="text-3xl md:text-5xl font-black text-white mb-8 md:mb-12 tracking-widest uppercase drop-shadow-2xl z-10 text-center">
+      <h1 className="text-2xl md:text-5xl font-black text-white mb-8 md:mb-12 tracking-widest uppercase drop-shadow-2xl z-10 text-center">
         Genshin Bingo
       </h1>
       
@@ -363,6 +363,23 @@ export default function Home() {
           font-family: 'GenshinDrip';
           src: url('assets/fonts/Genshin Impact DRIP FONT.otf') format('opentype');
           font-weight: normal; font-style: normal;
+        }
+        /* Font Tiếng Trung (Genshin CN) */
+        @font-face {
+          font-family: 'GenshinCN';
+          src: url('/assets/fonts/zh-cn.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+          font-display: swap;
+        }
+
+        /* Font Tiếng Nhật (Genshin JP) */
+        @font-face {
+          font-family: 'GenshinJP';
+          src: url('/assets/fonts/ja-jp.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+          font-display: swap;
         }
         .confetti-particle { position: absolute; width: 6px; height: 6px; top: -10px; border-radius: 2px; animation: fall linear infinite; }
         @keyframes fall { 
