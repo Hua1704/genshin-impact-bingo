@@ -373,14 +373,6 @@ export default function Home() {
           font-display: swap;
         }
 
-        /* Font Tiếng Nhật (Genshin JP) */
-        @font-face {
-          font-family: 'GenshinJP';
-          src: url('/assets/fonts/ja-jp.ttf') format('truetype');
-          font-weight: normal;
-          font-style: normal;
-          font-display: swap;
-        }
         .confetti-particle { position: absolute; width: 6px; height: 6px; top: -10px; border-radius: 2px; animation: fall linear infinite; }
         @keyframes fall { 
           0% { transform: translateY(0) rotate(0deg); opacity: 1; }
